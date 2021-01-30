@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,49 +12,48 @@
 </head>
 <body>
 
-	<?php 
+	<?php
+
+	if (isset($_POST['save_info'])){
+		$api_result = $_SESSION['api_result'];
+		// var_dump($api_result);
+		if ($api_result){
+			require_once "config/dbwork.php";
+		}
+	}
+
+	$is_selected = false;
 	$header_text = "Weather in ";
 
-	if (isset($_POST['ny_btn']))   {
-		$header_text .= "{$_POST['ny_btn']}";
-		$location = "{$_POST['ny_btn']}";
-	}
-	elseif  (isset($_POST['washington_btn']))  {
-		$header_text .= "{$_POST['washington_btn']}";
-		$location = "{$_POST['washington_btn']}";
-	}
-	elseif  (isset($_POST['la_btn']))  {
-		$header_text .= "{$_POST['la_btn']}";
-		$location = "{$_POST['la_btn']}";
-	}
-	elseif  (isset($_POST['miami_btn']))  {
-		$header_text .= "{$_POST['miami_btn']}";
-		$location = "{$_POST['miami_btn']}";
-	}
-	elseif  (isset($_POST['seattle_btn']))  {
-		$header_text .= "{$_POST['seattle_btn']}";
-		$location = "{$_POST['seattle_btn']}";
-	}
-	else    {
+	if (isset($_POST['location']))   {
+			// var_dump($_POST);
+		$header_text .= "{$_POST['location']}";
+		$location = "{$_POST['location']}";
+		$is_selected = true;
+	}	elseif ($_SESSION['location']) {
+		$header_text .= "{$_SESSION['location']}";
+	} else {
 		$header_text = "Select a City!";
+		$is_selected = false;
 	}
 
+	if ($is_selected) {
+		$queryString = http_build_query([
+			'access_key' => 'bcd91eba085cc8e6fc57cd0c6b1adcf7',
+			'query' => $location,
+		]);
 
-	// $location = 'Moscow';
+		$ch = curl_init(sprintf('%s?%s', 'http://api.weatherstack.com/current', $queryString));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-	$queryString = http_build_query([
-		'access_key' => 'bcd91eba085cc8e6fc57cd0c6b1adcf7',
-		'query' => $location,
-	]);
+		$json = curl_exec($ch);
+		curl_close($ch);
 
-	$ch = curl_init(sprintf('%s?%s', 'http://api.weatherstack.com/current', $queryString));
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$api_result = json_decode($json, true);
 
-	$json = curl_exec($ch);
-	curl_close($ch);
-
-	$api_result = json_decode($json, true);
-
+		$_SESSION['location'] = $_POST['location'];
+		$_SESSION['api_result'] = $api_result;
+	}
 	?>
 
 
@@ -77,17 +80,20 @@
 
 		<p>All Cities</p>
 
-		<form  method="POST">
+		<form method="POST">
 			<div class="btns">
-				<button type="submit" name="ny_btn" value="New York">New York</button>
-				<button type="submit" name="washington_btn" value="Washington">Washington</button>
-				<button type="submit" name="la_btn" value="Los Angeles">Los Angeles</button>
-				<button type="submit" name="miami_btn" value="Miami">Miami</button>
-				<button type="submit" name="seattle_btn" value="Seattle">Seattle</button>
+				<button type="submit" name="location" value="New York">New York</button>
+				<button type="submit" name="location" value="Washington">Washington</button>
+				<button type="submit" name="location" value="Los Angeles">Los Angeles</button>
+				<button type="submit" name="location" value="Miami">Miami</button>
+				<button type="submit" name="location" value="Seattle">Seattle</button>
+			</div>
+			<div class="btns">
+				<button class="save-btn" type="submit" name="save_info">Save</button>
 			</div>
 		</form>
-
 	</div>
+
 </body>
 </html>
 
