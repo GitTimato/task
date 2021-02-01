@@ -1,5 +1,5 @@
 body {
-	margin-top: 5%;
+	margin-top: 2%;
 }
 
 p {
@@ -21,7 +21,7 @@ button {
 	margin: 0 auto;
 	border: 1px solid black;
 	border-collapse: collapse;
-	margin-bottom: 100px;
+	margin-bottom: 60px;
 }
 
 .info-tbl th, td{
@@ -36,7 +36,21 @@ button {
 	justify-content: center;
 }
 
-.save-btn {
+.btns-columns {
+	flex-direction: column;
+	align-items: center;
+	margin-top: 70px;
+	margin-bottom: 40px;
+}
+
+.btns-columns button {
 	width: 10%;
-	margin-top: 100px;
+}
+
+.save_btn {
+	margin-bottom: 15px;
+}
+
+.info_btn {
+	margin-bottom: 30px;
 }

@@ -1,3 +1,7 @@
+<!-- При перезагрузке страницы форма отправляется заново
+Поэтому если перезагрузить страницы после нажатия кнопки "Show DataBase", тогда таблица исчезнет, при следующем клике - появится. -->
+
+
 <?php
 session_start();
 
@@ -14,13 +18,21 @@ require_once "config/connect.php";
 </head>
 <body>
 
+	<?php
+	function change_show_flag(){
+		if ($_SESSION['to_show_info'])
+			$_SESSION['to_show_info'] = false;
+		else
+			$_SESSION['to_show_info'] = true;
+	}
+	?>
 
 	<?php
 	if(isset($_POST['show_info'])){
 
 		$api_result = $_SESSION['api_result'];
-		if(!isset($_SESSION['show']) or $_SESSION['show'])
-			$to_show_info = true;
+		change_show_flag();
+		$to_show_info = $_SESSION['to_show_info'];
 
 	} elseif (isset($_POST['save_info'])){
 
@@ -31,7 +43,7 @@ require_once "config/connect.php";
 		$to_show_info = $_SESSION['to_show_info'];
 
 	} else {
-		$_SESSION['show'] = true;
+		$_SESSION['to_show_info'] = false;
 	}
 
 	$is_selected = false;
@@ -46,9 +58,9 @@ require_once "config/connect.php";
 
 	}	elseif ($_SESSION['location']) {
 		$header_text .= "{$_SESSION['location']}";
-		$api_result = $_SESSION['api_result'];
 	} else {
 		$header_text = "Select a City!";
+		$is_selected = false;
 	}
 
 	if ($is_selected) {
@@ -80,7 +92,7 @@ require_once "config/connect.php";
 				<th>Temperature</th>
 				<th>Wind speed</th>
 				<th>Pressure</th>
-			</tr>
+			</tr> <!--ряд с ячейками заголовков-->
 			<tr>
 				<td><?php echo $api_result['location']['country'] ?></td>
 				<td><?php echo $api_result['location']['name']?></td>
@@ -88,7 +100,7 @@ require_once "config/connect.php";
 				<td><?php echo $api_result['current']['temperature']?></td>
 				<td><?php echo $api_result['current']['wind_speed']?></td>
 				<td><?php echo $api_result['current']['pressure']?></td>
-			</tr>
+			</tr> <!--ряд с ячейками тела таблицы-->
 		</table>
 
 		<p>All Cities</p>
@@ -110,7 +122,6 @@ require_once "config/connect.php";
 		<?php
 		if ($to_show_info) {
 			require_once "config/show_db.php";
-			$_SESSION['show'] = false;
 		}
 		?>
 
@@ -119,3 +130,7 @@ require_once "config/connect.php";
 
 </body>
 </html>
+
+
+
+
