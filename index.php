@@ -1,9 +1,10 @@
 <?php
+
 session_start();
 
 require_once "config/connect.php";
-// require_once "config/btn-control.php";
-// $api_result = $_SESSION['api_result'];
+
+$api_result = $_SESSION['api_result'];
 
 ?>
 
@@ -19,75 +20,17 @@ require_once "config/connect.php";
 </head>
 <body>
 
-
-	<?php
-	if(isset($_POST['show_info'])){
-
-		$api_result = $_SESSION['api_result'];
-		if(!isset($_SESSION['show']) or $_SESSION['show'])
-			$to_show_info = true;
-
-	} elseif (isset($_POST['save_info'])){
-
-		$api_result = $_SESSION['api_result'];
-		if ($api_result){
-			require_once "config/dbwork.php";
-		}
-		$to_show_info = $_SESSION['to_show_info'];
-
-	} else {
-		$_SESSION['show'] = true;
-	}
-
-
-	$is_selected = false;
-	$header_text = "Weather in ";
-
-	if (isset($_POST['location'])) {
-
-		$header_text .= "{$_POST['location']}";
-		$location = "{$_POST['location']}";
-		$is_selected = true;
-		$_SESSION['location'] = $_POST['location'];
-
-	}	elseif ($_SESSION['location']) {
-		$header_text .= "{$_SESSION['location']}";
-		$api_result = $_SESSION['api_result'];
-	} else {
-		$header_text = "Select a City!";
-	}
-
-	if ($is_selected) {
-		$queryString = http_build_query([
-			'access_key' => 'bcd91eba085cc8e6fc57cd0c6b1adcf7',
-			'query' => $location,
-		]);
-
-		$ch = curl_init(sprintf('%s?%s', 'http://api.weatherstack.com/current', $queryString));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		$json = curl_exec($ch);
-		curl_close($ch);
-
-		$api_result = json_decode($json, true);
-
-		$_SESSION['api_result'] = $api_result;
-	}
-	?>
-
-
 	<div class="container">
-
 		<p class="text-center mb-4">
 			<?php
 			if (isset($_SESSION['location']))
-				echo "Weather in ".$_SESSION['location'];
+				echo "Weather in ". $_SESSION['location'];
 			else
 				echo "Select a City!";
 			?>
 		</p>
 		<div class="row">
-			<table class="info-tbl table">
+			<table class="table info-tbl mb-6">
 				<tr>
 					<th>Country</th>
 					<th>City</th>
@@ -97,56 +40,64 @@ require_once "config/connect.php";
 					<th>Pressure</th>
 				</tr>
 				<tr>
-					<td><?php echo $api_result['location']['country'] ?></td>
-					<td><?php echo $api_result['location']['name']?></td>
-					<td><?php echo $api_result['location']['localtime']?></td>
-					<td><?php echo $api_result['current']['temperature']?></td>
-					<td><?php echo $api_result['current']['wind_speed']?></td>
-					<td><?php echo $api_result['current']['pressure']?></td>
+					<td><?= $api_result['location']['country'] ?></td>
+					<td><?= $api_result['location']['name']?></td>
+					<td><?= $api_result['location']['localtime']?></td>
+					<td><?= $api_result['current']['temperature']?></td>
+					<td><?= $api_result['current']['wind_speed']?></td>
+					<td><?= $api_result['current']['pressure']?></td>
 				</tr>
 			</table>
 		</div>
 
-		<!-- <div class="row"> -->
-			<p class="text-center mb-4">All Cities</p>
-			<!-- </div> -->
+		<p class="text-center mb-4">All Cities</p>
 
-			<form method="POST" class="city-btns">
-				<div class="d-flex justify-content-center my-btn-background">
-					<div class="col-2 mr-4 test">
-						<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="New York">New York</button>
-					</div>
-
-					<div class="col-2 mr-4 test">
-						<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Washington">Washington</button>
-					</div>
-
-					<div class="col-2 test">
-						<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Los Angeles">Los Angeles</button>
-					</div>
-
-					<div class="col-2 ml-4 test">
-						<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Miami">Miami</button>
-					</div>
-
-					<div class="col-2 ml-4 test">
-						<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Seattle">Seattle</button>
-					</div>
+		<form method="POST" action="config/btn-handling.php">
+			<div class="d-flex justify-content-center my-btn-background">
+				<div class="col-2 mr-4 test">
+					<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="New York">New York</button>
 				</div>
-				<div class="btns btns-columns d-flex">
-					<button class="btn btn-info btn-lg mb-4" type="submit" name="save_info">Save</button>
-					<button class="btn btn-info btn-lg" type="submit" name="show_info">Show DataBase</button>
+
+				<div class="col-2 mr-4 test">
+					<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Washington">Washington</button>
 				</div>
-			</form>
 
-			<?php
-			if ($to_show_info) {
-				require_once "config/show_db.php";
-				$_SESSION['show'] = false;
-			}
-			?>
+				<div class="col-2 test">
+					<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Los Angeles">Los Angeles</button>
+				</div>
 
-		</div>
+				<div class="col-2 ml-4 test">
+					<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Miami">Miami</button>
+				</div>
 
-	</body>
-	</html>
+				<div class="col-2 ml-4 test">
+					<button type="submit" class="btn btn-outline-info cust-btn" name="location" value="Seattle">Seattle</button>
+				</div>
+			</div>
+			<div class="btns d-flex btns-columns mt-5">
+				<button class="btn btn-info btn-lg mb-4" type="submit" name="save_info">Save</button>
+				<button class="btn btn-info btn-lg" type="submit" name="show_info">Show DataBase</button>
+			</div>
+		</form>
+
+
+		<?php
+
+		if(!$_SESSION['btn-handling']) {
+			$_SESSION['was_shown'] = false;
+			$_SESSION['show'] = false;
+		}
+		$_SESSION['btn-handling'] = false;
+
+		if ($_SESSION['show']) {
+			require_once "config/show_db.php";
+			$_SESSION['show'] = false;
+			$_SESSION['was_shown'] = true;
+		}
+
+		?>
+
+	</div>
+
+</body>
+</html>

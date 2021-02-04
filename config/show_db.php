@@ -1,5 +1,5 @@
 <div class="container">
-	<table class="info-tbl">
+	<table class="table info-tbl">
 		<tr>
 			<th>Country</th>
 			<th>City</th>
@@ -8,7 +8,7 @@
 			<th>Wind speed</th>
 			<th>Pressure</th>
 			<th>RefreshedAt</th>
-		</tr> <!--ряд с ячейками заголовков-->
+		</tr>
 
 		<?php
 		$query = "SELECT * FROM `info` ORDER BY `refreshedAt` DESC";
@@ -29,5 +29,4 @@
 		}
 		?>
 	</table>
-
 </div>

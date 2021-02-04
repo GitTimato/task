@@ -3,6 +3,5 @@
 
 	if (!$connect) {
 		die("Error");
-	} else {
 	}
 ?>

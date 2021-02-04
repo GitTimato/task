@@ -1,4 +1,5 @@
-<?php  
+<?php 
+
 require_once "connect.php";
 
 $city = $api_result['location']['name'];
@@ -15,8 +16,4 @@ $query = "INSERT INTO `info`(`city`,`country`,`timeLocal`,`temperature`,`windSpe
 
 mysqli_query($connect, $query);
 
-// $dave= mysqli_query($connect, $query) or die(mysqli_error($connect));
-// print $query;
-
-// header("Location: ../index.php");
 ?>
