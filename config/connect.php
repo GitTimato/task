@@ -1,5 +1,5 @@
 <?php 
-	$connect = mysqli_connect('localhost', 'root', 'root', 'weather');
+	$connect = mysqli_connect('localhost', 'root', '', 'weather');
 
 	if (!$connect) {
 		die("Error");

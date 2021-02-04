@@ -1,26 +1,14 @@
 body {
-	margin-top: 2%;
+	background: url(../img/background-2.jpg) no-repeat center center fixed;
+	margin-top: 1%;
 }
 
 p {
-	text-align: center;
 	font-size: 2rem;
 }
 
-button {
-	font-size: 1.2rem;
-	margin: 0 30px;
-	padding: 5px 8px;
-}
-
-.container {
-	align-content: center;
-}
-
 .info-tbl {
-	margin: 0 auto;
-	border: 1px solid black;
-	border-collapse: collapse;
+	border-collapse: separate;
 	margin-bottom: 60px;
 }
 
@@ -31,9 +19,20 @@ button {
 	padding: 10px 10px;
 }
 
-.btns, .save-btn {
+.info-tbl th {
+	background: #b7eaa6;
+}
+
+.info-tbl tr {
+	background: #D8E5FF;
+}
+
+.info-tbl tr:hover{
+	background: #9ABCFF;
+}
+
+.btns {
 	display: flex;
-	justify-content: center;
 }
 
 .btns-columns {
@@ -44,13 +43,18 @@ button {
 }
 
 .btns-columns button {
-	width: 10%;
+	width: 20%;
 }
 
-.save_btn {
-	margin-bottom: 15px;
+.cust-btn {
+	width: 100%;
 }
 
-.info_btn {
-	margin-bottom: 30px;
+.my-btn-background button{
+	font-size: 1.5rem;
+	background: #F2FFE5;
+}
+
+.my-btn-background button:hover {
+	background: #6ED10A;
 }
